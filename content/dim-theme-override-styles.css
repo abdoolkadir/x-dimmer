@@ -1,0 +1,476 @@
+/*
+ * =============================================================================
+ * X DIMMER — DIM THEME OVERRIDE STYLES
+ * =============================================================================
+ *
+ * PURPOSE:
+ * This CSS file restores the beloved "Dim" dark theme to X/Twitter after it was
+ * removed in February 2026 by Nikita Bier's team. The "Dim" mode used a softer
+ * navy-blue palette (#15202B family) instead of the harsh pure-black (#000000)
+ * "Lights Out" mode. Many users preferred Dim because it was easier on the eyes,
+ * especially on modern OLED displays where true blacks create stark contrast.
+ *
+ * APPROACH:
+ * We override X's "Lights Out" color palette with the original "Dim" palette.
+ * This works by:
+ *   1. Overriding CSS custom properties (if X uses them internally)
+ *   2. Targeting known structural elements with broad selectors
+ *   3. Using attribute selectors to catch inline-styled elements
+ *   4. Using !important to ensure our overrides take precedence
+ *
+ * COLOR MAPPING (Lights Out → Dim):
+ *   #000000  → #15202B  (primary background — the signature dim navy)
+ *   #16181C  → #192734  (secondary/elevated surfaces — cards, compose area)
+ *   #1D1F23  → #1E2732  (tertiary/hover states — subtle elevation change)
+ *   #202327  → #22303C  (another hover/active variant)
+ *   #2F3336  → #38444D  (borders — slightly lighter in dim for visibility)
+ *   #333639  → #3D5466  (active borders / focused elements)
+ *   #71767B  → #8B98A5  (secondary text — boosted for readability on navy)
+ *   #E7E9EA  → #FFFFFF  (primary text stays white, or we keep E7E9EA)
+ *
+ * KNOWN X/TWITTER STRUCTURE:
+ *   - body and #react-root are the outermost containers
+ *   - [data-testid="primaryColumn"] is the main feed/content area
+ *   - [data-testid="sidebarColumn"] is the right sidebar (trends, who to follow)
+ *   - [data-testid="DMDrawer"] is the DM drawer
+ *   - Various header, nav, and modal elements exist with data-testid attributes
+ *   - X heavily uses inline styles for layout but uses classes for theming
+ *
+ * IMPORTANT NOTES:
+ *   - We use !important extensively because X's styles are highly specific
+ *   - We DO NOT modify text colors (they look fine on dim backgrounds)
+ *   - We DO NOT touch accent colors (X blue #1D9BF0 stays the same)
+ *   - We avoid touching images, videos, avatars, or media elements
+ *   - The MutationObserver in the content script handles dynamic elements
+ *     that get inline background-color: rgb(0, 0, 0) applied after load
+ * =============================================================================
+ */
+
+
+/* ---------------------------------------------------------------------------
+ * LAYER 1: ROOT AND BODY — THE FOUNDATION
+ * These are the outermost elements that set the overall page background.
+ * X applies background-color on both html and body, plus the React root.
+ * ---------------------------------------------------------------------------
+ */
+html,
+body {
+  background-color: #15202B !important;
+}
+
+/* React root container — X wraps everything in #react-root > div structure */
+#react-root,
+#react-root > div,
+#react-root > div > div {
+  background-color: #15202B !important;
+}
+
+
+/* ---------------------------------------------------------------------------
+ * LAYER 2: MAJOR STRUCTURAL CONTAINERS
+ * These target the primary layout regions of X's interface.
+ * The main column, sidebar, navigation, and header areas.
+ * ---------------------------------------------------------------------------
+ */
+
+/* Primary content column — the main feed area */
+[data-testid="primaryColumn"] {
+  background-color: #15202B !important;
+}
+
+/* Sidebar column — "What's happening", "Who to follow", etc. */
+[data-testid="sidebarColumn"] {
+  background-color: #15202B !important;
+}
+
+/* The main navigation/header bar at the top */
+header[role="banner"],
+header[role="banner"] > div,
+header[role="banner"] > div > div {
+  background-color: #15202B !important;
+}
+
+/* Navigation sidebar (left side — Home, Explore, etc.) */
+nav[role="navigation"],
+nav[aria-label="Primary"] {
+  background-color: #15202B !important;
+}
+
+/* The bottom navigation bar on mobile web */
+nav[aria-label="Bottom navigation"] {
+  background-color: #15202B !important;
+}
+
+/* DM drawer */
+[data-testid="DMDrawer"],
+[data-testid="DMDrawer"] > div {
+  background-color: #192734 !important;
+}
+
+
+/* ---------------------------------------------------------------------------
+ * LAYER 3: BROAD ELEMENT OVERRIDES
+ * X uses deeply nested divs. We target common patterns.
+ * These catch the majority of black-background containers.
+ * ---------------------------------------------------------------------------
+ */
+
+/* 
+ * Override any div that X has painted pure black.
+ * We use background-color targeting to be surgical.
+ * The content script's MutationObserver also handles inline styles.
+ */
+
+
+/* ---------------------------------------------------------------------------
+ * LAYER 4: SECONDARY SURFACES (Cards, Menus, Modals)
+ * These elements sit "above" the primary background and should use
+ * the secondary dim color (#192734) for visual hierarchy.
+ * ---------------------------------------------------------------------------
+ */
+
+/* Tweet compose area / "What is happening?" box */
+[data-testid="tweetTextarea_0_label"],
+[data-testid="toolBar"] {
+  background-color: #15202B !important;
+}
+
+/* Dropdown menus and popovers */
+[data-testid="Dropdown"],
+[role="menu"],
+[role="menu"] > div {
+  background-color: #192734 !important;
+}
+
+/* Dialog/modal overlays — the dark backdrop */
+[role="dialog"],
+[role="dialog"] > div > div {
+  background-color: #192734 !important;
+}
+
+/* The modal backdrop (semi-transparent overlay) */
+[data-testid="mask"] {
+  background-color: rgba(91, 112, 131, 0.4) !important;
+}
+
+/* Search bar area */
+[data-testid="SearchBox_Search_Input"],
+[role="search"] {
+  background-color: #192734 !important;
+}
+
+/* Tooltip and popup containers */
+[role="tooltip"],
+[data-testid="HoverCard"] {
+  background-color: #192734 !important;
+}
+
+/* Who to follow / trends / sidebar cards */
+[data-testid="sidebarColumn"] section,
+[data-testid="sidebarColumn"] aside {
+  background-color: #192734 !important;
+  border-radius: 16px;
+}
+
+
+/* ---------------------------------------------------------------------------
+ * LAYER 5: HOVER AND INTERACTION STATES
+ * When users hover over tweets, buttons, or interactive elements,
+ * X shows a subtle highlight. We map these to dim-appropriate colors.
+ * ---------------------------------------------------------------------------
+ */
+
+/* Tweet hover effect — subtle navy highlight */
+[data-testid="tweet"]:hover,
+article[role="article"]:hover {
+  background-color: rgba(30, 39, 50, 0.7) !important;
+}
+
+/* Clickable list items hover (settings, menus, etc.) */
+[role="listitem"]:hover,
+[role="option"]:hover {
+  background-color: #1E2732 !important;
+}
+
+
+/* ---------------------------------------------------------------------------
+ * LAYER 6: BORDERS — SLIGHTLY WARMER IN DIM MODE
+ * X's "Lights Out" uses very subtle gray borders (#2F3336).
+ * The original "Dim" mode used slightly more visible borders (#38444D).
+ * ---------------------------------------------------------------------------
+ */
+
+/* Override common border patterns */
+[data-testid="primaryColumn"] > div > div {
+  border-color: #38444D !important;
+}
+
+/* Horizontal dividers between tweets */
+[data-testid="cellInnerDiv"] > div {
+  border-color: #38444D !important;
+}
+
+/* Tab indicator underlines (For You / Following tabs, etc.) */
+[role="tab"] {
+  border-color: #38444D !important;
+}
+
+
+/* ---------------------------------------------------------------------------
+ * LAYER 7: SCROLLBAR STYLING
+ * Custom scrollbar colors to match the dim theme.
+ * Only works in Chromium-based browsers (which is our target).
+ * ---------------------------------------------------------------------------
+ */
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #15202B;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #38444D;
+  border-radius: 4px;
+  border: 2px solid #15202B;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #8B98A5;
+}
+
+
+/* ---------------------------------------------------------------------------
+ * LAYER 8: CATCH-ALL ATTRIBUTE SELECTORS
+ * These target elements that X styles with specific inline background colors.
+ * The [style*=] selector matches elements where the style attribute contains
+ * the specified substring. This catches dynamically applied inline styles.
+ *
+ * PERFORMANCE NOTE: Attribute selectors on [style] can be expensive in large
+ * DOMs. However, X's DOM is relatively bounded and modern Chrome handles
+ * these efficiently. The MutationObserver in the content script is the
+ * primary mechanism; these CSS rules are the fallback/complement.
+ * ---------------------------------------------------------------------------
+ */
+
+/* Pure black backgrounds → dim primary
+ * 
+ * IMPORTANT: X uses BOTH rgb() and rgba() formats for the same black color.
+ * For example: background-color: rgba(0, 0, 0, 1.00)
+ * We must catch both formats. The [style*="rgba(0, 0, 0"] selector uses a
+ * substring match — it catches any alpha value (1.00, 0.95, etc.) because
+ * we're matching the opening portion "rgba(0, 0, 0" without closing paren.
+ */
+*[style*="background-color: rgb(0, 0, 0)"] {
+  background-color: #15202B !important;
+}
+*[style*="background-color: rgba(0, 0, 0"] {
+  background-color: #15202B !important;
+}
+*[style*="background-color:#000"] {
+  background-color: #15202B !important;
+}
+*[style*="background-color: #000"] {
+  background-color: #15202B !important;
+}
+*[style*="background: rgb(0, 0, 0)"] {
+  background-color: #15202B !important;
+}
+*[style*="background: rgba(0, 0, 0"] {
+  background-color: #15202B !important;
+}
+*[style*="background: #000"] {
+  background-color: #15202B !important;
+}
+
+/* Secondary black surfaces → dim secondary */
+*[style*="background-color: rgb(22, 24, 28)"] {
+  background-color: #192734 !important;
+}
+*[style*="background-color: rgba(22, 24, 28"] {
+  background-color: #192734 !important;
+}
+*[style*="background-color: rgb(21, 24, 28)"] {
+  background-color: #192734 !important;
+}
+*[style*="background-color: rgba(21, 24, 28"] {
+  background-color: #192734 !important;
+}
+*[style*="background-color: rgb(32, 35, 39)"] {
+  background-color: #22303C !important;
+}
+*[style*="background-color: rgba(32, 35, 39"] {
+  background-color: #22303C !important;
+}
+
+/* Tertiary / hover surfaces */
+*[style*="background-color: rgb(29, 31, 35)"] {
+  background-color: #1E2732 !important;
+}
+*[style*="background-color: rgba(29, 31, 35"] {
+  background-color: #1E2732 !important;
+}
+
+/* Border color overrides */
+*[style*="border-color: rgb(47, 51, 54)"] {
+  border-color: #38444D !important;
+}
+*[style*="border-bottom-color: rgb(47, 51, 54)"] {
+  border-bottom-color: #38444D !important;
+}
+*[style*="border-top-color: rgb(47, 51, 54)"] {
+  border-top-color: #38444D !important;
+}
+
+
+/* ---------------------------------------------------------------------------
+ * LAYER 9: GROK / AI CHAT SIDEBAR AND SPECIAL VIEWS
+ * X has various special views (Grok AI, Spaces, Communities, etc.)
+ * that may use different background colors. We catch those here.
+ * ---------------------------------------------------------------------------
+ */
+
+/* Grok sidebar / AI interface */
+/* [data-testid="GrokDrawer"],
+[data-testid="GrokDrawer"] > button {
+  background-color: #192734 !important;
+} */
+
+/* Spaces audio rooms */
+[data-testid="SpacesBar"] {
+  background-color: #192734 !important;
+}
+
+/* Communities tab */
+[data-testid="communities_picker"] {
+  background-color: #15202B !important;
+}
+
+
+/* ---------------------------------------------------------------------------
+ * LAYER 10: MEDIA & IMAGE PROTECTION
+ * CRITICAL: We must NOT dim images, videos, avatars, emojis, or media.
+ * This layer ensures media elements are excluded from our overrides.
+ * Without this, user avatars and images would get a blue tint.
+ * ---------------------------------------------------------------------------
+ */
+
+/* Ensure images and videos are not affected */
+img,
+video,
+svg:not([class*="icon"]),
+[data-testid="tweetPhoto"],
+[data-testid="videoPlayer"],
+[data-testid="UserAvatar-Container"] img {
+  background-color: transparent !important;
+}
+
+
+/* ---------------------------------------------------------------------------
+ * LAYER 11: COMPOSE TWEET MODAL
+ * The compose tweet modal/drawer has its own background and styling.
+ * This is a frequently used UI element that needs to look right.
+ * ---------------------------------------------------------------------------
+ */
+
+/* Compose tweet modal */
+[data-testid="tweetButtonInline"],
+[data-testid="tweetTextarea_0"],
+[data-testid="toolBar"] > div {
+  background-color: transparent !important;
+}
+
+/* The compose modal itself */
+[aria-labelledby="modal-header"] {
+  background-color: #192734 !important;
+}
+[aria-labelledby="modal-header"] > div {
+  background-color: #192734 !important;
+}
+
+
+/* ---------------------------------------------------------------------------
+ * LAYER 12: NOTIFICATION & MESSAGING PANELS
+ * Notifications tab and DM conversations have distinct containers
+ * that need the dim treatment.
+ * ---------------------------------------------------------------------------
+ */
+
+/* Notification items */
+[data-testid="notification"] {
+  background-color: #15202B !important;
+}
+
+/* Conversation/DM messages */
+[data-testid="messageEntry"],
+[data-testid="conversation"] {
+  background-color: #192734 !important;
+}
+
+/* DM compose area */
+[data-testid="dmComposerTextInput"] {
+  background-color: #192734 !important;
+}
+
+
+/* ---------------------------------------------------------------------------
+ * LAYER 13: SETTINGS & ACCOUNT PAGES
+ * These pages have different layouts but still use the same dark backgrounds.
+ * ---------------------------------------------------------------------------
+ */
+
+/* Settings page containers */
+[data-testid="settingsScreen"],
+[data-testid="accountScreen"] {
+  background-color: #15202B !important;
+}
+
+
+/* ---------------------------------------------------------------------------
+ * LAYER 14: LOADING STATES & SKELETONS
+ * X uses shimmer/skeleton loading placeholders. We match their colors
+ * to the dim palette so the loading state looks natural.
+ * ---------------------------------------------------------------------------
+ */
+
+/* Skeleton loaders / shimmer placeholders */
+[data-testid="sheetDialog"],
+[data-testid="sheetDialog"] > div {
+  background-color: #192734 !important;
+}
+
+
+/* ---------------------------------------------------------------------------
+ * LAYER 15: X PREMIUM / VERIFIED BADGE AREAS
+ * Premium subscription UI elements and verification badge areas.
+ * ---------------------------------------------------------------------------
+ */
+
+/* Premium subscription CTA cards */
+[data-testid="premiumCTA"],
+[data-testid="premiumSignup"] {
+  background-color: #192734 !important;
+  border-color: #38444D !important;
+}
+
+
+/* ---------------------------------------------------------------------------
+ * LAYER 16: SMOOTH TRANSITION
+ * Add a very subtle transition so the color swap doesn't feel jarring
+ * when the extension is toggled on. This makes it feel intentional.
+ * We keep it short (150ms) so it doesn't feel sluggish.
+ * ---------------------------------------------------------------------------
+ */
+
+body,
+#react-root,
+#react-root > div,
+header[role="banner"],
+[data-testid="primaryColumn"],
+[data-testid="sidebarColumn"],
+[role="dialog"],
+nav[role="navigation"] {
+  transition: background-color 150ms ease-in-out;
+}

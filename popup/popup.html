@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!--
+    X DIMMER — POPUP UI
+    
+    This is the extension popup that appears when users click the X Dimmer icon
+    in Chrome's toolbar. It provides a beautiful, minimal interface to:
+    1. Toggle dim mode on/off with a satisfying switch
+    2. See the current state at a glance
+    3. Learn what the extension does (for first-time users)
+    
+    DESIGN PHILOSOPHY:
+    The popup is designed to feel like it belongs to X/Twitter's own interface.
+    It uses X's color palette, typography (system font stack matching X's),
+    and visual language. The goal is that it feels like a native X settings panel.
+    
+    The popup is intentionally compact (320x auto height) to not feel intrusive.
+    It uses the dim theme colors as its own background, which serves as both
+    branding and a preview of what the extension does.
+  -->
+  <title>X Dimmer</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <!-- 
+    Main container with the dim navy background.
+    This entire popup IS the dim theme — users see the colors they'll get.
+  -->
+  <div class="x-dimmer-popup-container">
+    
+    <!-- 
+      HEADER SECTION
+      Shows the extension branding with the moon icon and name.
+      The moon icon is thematic (dimming/night mode) and recognizable.
+    -->
+    <div class="x-dimmer-popup-header">
+      <div class="x-dimmer-popup-header-icon-and-title">
+        <!-- 
+          Moon/dim icon — SVG crescent moon.
+          We use inline SVG for instant rendering (no network request)
+          and to match the exact X blue color (#1D9BF0).
+        -->
+        <div class="x-dimmer-popup-moon-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M21.752 15.002A9.718 9.718 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998Z" fill="#1D9BF0" stroke="#1D9BF0" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="x-dimmer-popup-title-group">
+          <h1 class="x-dimmer-popup-title">X Dimmer</h1>
+          <p class="x-dimmer-popup-subtitle">Bring back the Dim theme</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 
+      TOGGLE SECTION
+      The main interaction area. A large, satisfying toggle switch
+      with clear ON/OFF state and a description of what it does.
+    -->
+    <div class="x-dimmer-popup-toggle-section">
+      <div class="x-dimmer-popup-toggle-row">
+        <div class="x-dimmer-popup-toggle-label-group">
+          <span class="x-dimmer-popup-toggle-label">Dim Mode</span>
+          <span class="x-dimmer-popup-toggle-status" id="dimmer-status-text">Active</span>
+        </div>
+        <!-- 
+          Toggle switch — uses a hidden checkbox for accessibility.
+          The visual toggle is CSS-only (no JS needed for the animation).
+          The JS only handles the click event to update chrome.storage.
+        -->
+        <label class="x-dimmer-popup-toggle-switch" for="dimmer-toggle-checkbox">
+          <input type="checkbox" id="dimmer-toggle-checkbox" checked>
+          <span class="x-dimmer-popup-toggle-slider"></span>
+        </label>
+      </div>
+      <p class="x-dimmer-popup-toggle-description">
+        Replaces the harsh pure-black "Lights Out" theme with the softer navy-blue "Dim" theme.
+      </p>
+    </div>
+
+    <!-- 
+      PREVIEW SECTION
+      Shows a small visual preview of the color difference between
+      Lights Out (what X currently has) and Dim (what we restore).
+      This helps users understand the extension's value instantly.
+    -->
+    <div class="x-dimmer-popup-preview-section">
+      <p class="x-dimmer-popup-preview-label">Color comparison</p>
+      <div class="x-dimmer-popup-preview-swatches">
+        <div class="x-dimmer-popup-swatch-group">
+          <div class="x-dimmer-popup-swatch x-dimmer-popup-swatch-lights-out">
+            <span class="x-dimmer-popup-swatch-text">Aa</span>
+          </div>
+          <span class="x-dimmer-popup-swatch-name">Lights Out</span>
+        </div>
+        <div class="x-dimmer-popup-swatch-arrow">→</div>
+        <div class="x-dimmer-popup-swatch-group">
+          <div class="x-dimmer-popup-swatch x-dimmer-popup-swatch-dim">
+            <span class="x-dimmer-popup-swatch-text">Aa</span>
+          </div>
+          <span class="x-dimmer-popup-swatch-name x-dimmer-popup-swatch-name-active">Dim</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 
+      FOOTER
+      Minimal footer with version info and a link.
+      Keeps the popup feeling complete without being heavy.
+    -->
+    <div class="x-dimmer-popup-footer">
+      <span class="x-dimmer-popup-footer-text">v1.0.0 · Works on x.com</span>
+    </div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

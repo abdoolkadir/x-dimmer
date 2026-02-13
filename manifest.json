@@ -1,0 +1,53 @@
+{
+  "manifest_version": 3,
+  "name": "X Dimmer — Bring Back Dim Mode",
+  "version": "1.0.0",
+  "description": "Restores the beloved Dim dark theme to X/Twitter. Replaces the harsh pure-black 'Lights Out' mode with the softer navy-blue 'Dim' theme that was removed in February 2026.",
+  "permissions": [
+    "storage",
+    "activeTab"
+  ],
+  "host_permissions": [
+    "https://x.com/*",
+    "https://twitter.com/*",
+    "https://mobile.x.com/*",
+    "https://mobile.twitter.com/*"
+  ],
+  "background": {
+    "service_worker": "background/service-worker-background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://x.com/*",
+        "https://twitter.com/*",
+        "https://mobile.x.com/*",
+        "https://mobile.twitter.com/*"
+      ],
+      "js": [
+        "content/content-script-dim-theme-injector.js"
+      ],
+      "run_at": "document_start"
+    }
+  ],
+  "action": {
+    "default_popup": "popup/popup.html",
+    "default_title": "X Dimmer — Toggle Dim Mode",
+    "default_icon": {
+      "16": "icons/icon-16.png",
+      "48": "icons/icon-48.png",
+      "128": "icons/icon-128.png"
+    }
+  },
+  "icons": {
+    "16": "icons/icon-16.png",
+    "48": "icons/icon-48.png",
+    "128": "icons/icon-128.png"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["content/dim-theme-override-styles.css"],
+      "matches": ["https://x.com/*", "https://twitter.com/*", "https://mobile.x.com/*", "https://mobile.twitter.com/*"]
+    }
+  ]
+}

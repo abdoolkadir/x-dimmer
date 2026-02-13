@@ -1,0 +1,442 @@
+/*
+ * =============================================================================
+ * X DIMMER — POPUP STYLESHEET
+ * =============================================================================
+ *
+ * PURPOSE:
+ * Styles the extension popup that appears when clicking the X Dimmer icon.
+ * Designed to match X/Twitter's visual language so it feels like a native
+ * settings panel rather than a third-party add-on.
+ *
+ * DESIGN SYSTEM:
+ * - Colors: Uses X's "Dim" palette (the very theme we're restoring)
+ *   so the popup itself is a living preview of what the extension does
+ * - Typography: System font stack matching X's (system-ui, -apple-system, etc.)
+ * - Spacing: 16px base grid (matches X's internal spacing system)
+ * - Border radius: 12-16px (matches X's rounded card aesthetic)
+ * - Transitions: 200ms ease for most interactions (smooth but not sluggish)
+ *
+ * WHY THESE SPECIFIC COLORS:
+ * The popup background (#15202B) IS the dim theme color. This is intentional
+ * branding — users literally see the dim color when they open the popup,
+ * reinforcing what the extension does. The secondary color (#192734) is used
+ * for cards/sections within the popup to create visual hierarchy, just like
+ * X's own dim theme used two tiers of dark navy.
+ * =============================================================================
+ */
+
+
+/* ---------------------------------------------------------------------------
+ * RESET & BASE
+ * ---------------------------------------------------------------------------
+ */
+
+/* Reset margins and set base typography to match X's font stack */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  /* 
+   * X/Twitter uses this exact system font stack.
+   * We match it so the popup feels native to X's interface.
+   */
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+               Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.4;
+  color: #E7E9EA;
+  
+  /* 
+   * Fixed width for the popup.
+   * 340px is wide enough for content but not so wide that it feels heavy.
+   * Chrome extension popups don't support responsive widths well,
+   * so we set a fixed width for consistent appearance.
+   */
+  width: 340px;
+  
+  /* Prevent any scrollbar flash */
+  overflow: hidden;
+  
+  /* Smooth text rendering */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+
+/* ---------------------------------------------------------------------------
+ * MAIN CONTAINER
+ * ---------------------------------------------------------------------------
+ */
+
+/*
+ * The outermost wrapper of the popup content.
+ * Uses the dim navy background as both styling and branding.
+ */
+.x-dimmer-popup-container {
+  background-color: #15202B;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+
+/* ---------------------------------------------------------------------------
+ * HEADER
+ * Shows the extension icon and name.
+ * ---------------------------------------------------------------------------
+ */
+
+.x-dimmer-popup-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.x-dimmer-popup-header-icon-and-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/*
+ * The moon icon container.
+ * Given a subtle background circle to make it feel like an app icon.
+ * The background is slightly lighter than the popup bg for depth.
+ */
+.x-dimmer-popup-moon-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #1a3148 0%, #192734 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  
+  /* Subtle shadow for depth */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.x-dimmer-popup-title-group {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+/* Extension name — bold and white, like X's section headers */
+.x-dimmer-popup-title {
+  font-size: 18px;
+  font-weight: 800;
+  color: #FFFFFF;
+  letter-spacing: -0.3px;
+}
+
+/* Subtitle — secondary text color, smaller */
+.x-dimmer-popup-subtitle {
+  font-size: 13px;
+  color: #8B98A5;
+  font-weight: 400;
+}
+
+
+/* ---------------------------------------------------------------------------
+ * TOGGLE SECTION
+ * The main interaction area with the ON/OFF switch.
+ * ---------------------------------------------------------------------------
+ */
+
+.x-dimmer-popup-toggle-section {
+  /*
+   * Card-style container with the secondary dim color.
+   * This creates visual separation from the background,
+   * mimicking X's card/panel design pattern.
+   */
+  background-color: #192734;
+  border-radius: 16px;
+  padding: 16px;
+  
+  /* Subtle border for definition */
+  border: 1px solid #38444D;
+}
+
+.x-dimmer-popup-toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.x-dimmer-popup-toggle-label-group {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+/* "Dim Mode" label — prominent and clear */
+.x-dimmer-popup-toggle-label {
+  font-size: 15px;
+  font-weight: 700;
+  color: #FFFFFF;
+}
+
+/* Status text — "Active" / "Inactive" with color coding */
+.x-dimmer-popup-toggle-status {
+  font-size: 13px;
+  font-weight: 500;
+  color: #1D9BF0;
+  transition: color 200ms ease;
+}
+
+/* When disabled, status text becomes muted */
+.x-dimmer-popup-toggle-status.x-dimmer-status-inactive {
+  color: #71767B;
+}
+
+/* Description text below the toggle */
+.x-dimmer-popup-toggle-description {
+  font-size: 13px;
+  color: #8B98A5;
+  line-height: 1.5;
+}
+
+
+/* ---------------------------------------------------------------------------
+ * TOGGLE SWITCH
+ * A beautiful, smooth toggle switch inspired by iOS/macOS design
+ * but colored to match X's palette.
+ * 
+ * ACCESSIBILITY:
+ * - Uses a real <input type="checkbox"> for screen readers
+ * - The visual slider is a <span> sibling styled with CSS
+ * - Focus ring appears on keyboard navigation
+ * - Adequate contrast ratios for the ON/OFF states
+ * ---------------------------------------------------------------------------
+ */
+
+.x-dimmer-popup-toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 52px;
+  height: 28px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+/* Hide the actual checkbox but keep it accessible to screen readers */
+.x-dimmer-popup-toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+  position: absolute;
+}
+
+/* The track (background) of the toggle switch */
+.x-dimmer-popup-toggle-slider {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  
+  /* OFF state: muted dark gray */
+  background-color: #38444D;
+  border-radius: 28px;
+  
+  /* Smooth transition for the track color change */
+  transition: background-color 200ms ease, box-shadow 200ms ease;
+}
+
+/* The circular knob/thumb of the toggle */
+.x-dimmer-popup-toggle-slider::before {
+  content: '';
+  position: absolute;
+  height: 22px;
+  width: 22px;
+  left: 3px;
+  bottom: 3px;
+  
+  background-color: #FFFFFF;
+  border-radius: 50%;
+  
+  /* Smooth transition for the knob sliding animation */
+  transition: transform 200ms cubic-bezier(0.4, 0, 0.2, 1);
+  
+  /* Subtle shadow on the knob for depth */
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+/* CHECKED (ON) state: X's signature blue background */
+.x-dimmer-popup-toggle-switch input:checked + .x-dimmer-popup-toggle-slider {
+  background-color: #1D9BF0;
+  
+  /* Subtle glow effect when ON */
+  box-shadow: 0 0 12px rgba(29, 155, 240, 0.3);
+}
+
+/* CHECKED (ON): Slide the knob to the right */
+.x-dimmer-popup-toggle-switch input:checked + .x-dimmer-popup-toggle-slider::before {
+  transform: translateX(24px);
+}
+
+/* Focus ring for keyboard navigation (accessibility) */
+.x-dimmer-popup-toggle-switch input:focus-visible + .x-dimmer-popup-toggle-slider {
+  outline: 2px solid #1D9BF0;
+  outline-offset: 2px;
+}
+
+/* Hover effect on the toggle track */
+.x-dimmer-popup-toggle-switch:hover .x-dimmer-popup-toggle-slider {
+  filter: brightness(1.1);
+}
+
+
+/* ---------------------------------------------------------------------------
+ * COLOR COMPARISON PREVIEW SECTION
+ * Shows side-by-side swatches of "Lights Out" vs "Dim" colors.
+ * This helps users instantly understand the extension's value.
+ * ---------------------------------------------------------------------------
+ */
+
+.x-dimmer-popup-preview-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.x-dimmer-popup-preview-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #8B98A5;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.x-dimmer-popup-preview-swatches {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+.x-dimmer-popup-swatch-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+/*
+ * Individual color swatches.
+ * Sized to be visible but not overwhelming.
+ * Show "Aa" text to demonstrate text-on-background readability.
+ */
+.x-dimmer-popup-swatch {
+  width: 100px;
+  height: 56px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #38444D;
+  
+  /* Subtle shadow for the swatch cards */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* "Lights Out" swatch — pure black (#000000) */
+.x-dimmer-popup-swatch-lights-out {
+  background-color: #000000;
+}
+
+/* "Dim" swatch — the navy blue we're restoring (#15202B) */
+.x-dimmer-popup-swatch-dim {
+  background-color: #15202B;
+  
+  /* Highlight border to show this is the "better" option */
+  border-color: #1D9BF0;
+  border-width: 2px;
+}
+
+/* Text inside swatches — shows readability of white text on each bg */
+.x-dimmer-popup-swatch-text {
+  font-size: 18px;
+  font-weight: 700;
+  color: #E7E9EA;
+}
+
+/* Swatch label text */
+.x-dimmer-popup-swatch-name {
+  font-size: 11px;
+  color: #71767B;
+  font-weight: 500;
+}
+
+/* Highlight the "Dim" label to show it's the active/preferred option */
+.x-dimmer-popup-swatch-name-active {
+  color: #1D9BF0;
+  font-weight: 600;
+}
+
+/* Arrow between swatches */
+.x-dimmer-popup-swatch-arrow {
+  font-size: 18px;
+  color: #38444D;
+  margin-top: -20px;
+}
+
+
+/* ---------------------------------------------------------------------------
+ * FOOTER
+ * Minimal footer with version info.
+ * ---------------------------------------------------------------------------
+ */
+
+.x-dimmer-popup-footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 4px;
+  
+  /* Subtle top border as a divider */
+  border-top: 1px solid rgba(56, 68, 77, 0.5);
+}
+
+.x-dimmer-popup-footer-text {
+  font-size: 11px;
+  color: #536471;
+}
+
+
+/* ---------------------------------------------------------------------------
+ * TRANSITION STATE: WHEN DISABLED
+ * When the extension is toggled off, we visually mute the popup
+ * to give feedback that it's in an "inactive" state.
+ * The .x-dimmer-popup-disabled class is added/removed by popup.js.
+ * ---------------------------------------------------------------------------
+ */
+
+.x-dimmer-popup-container.x-dimmer-popup-disabled .x-dimmer-popup-moon-icon {
+  opacity: 0.5;
+  filter: grayscale(0.5);
+  transition: opacity 200ms ease, filter 200ms ease;
+}
+
+.x-dimmer-popup-container.x-dimmer-popup-disabled .x-dimmer-popup-title {
+  color: #8B98A5;
+  transition: color 200ms ease;
+}
+
+.x-dimmer-popup-container.x-dimmer-popup-disabled .x-dimmer-popup-swatch-dim {
+  border-color: #38444D;
+  border-width: 1px;
+  opacity: 0.6;
+  transition: opacity 200ms ease, border-color 200ms ease;
+}
+
+.x-dimmer-popup-container.x-dimmer-popup-disabled .x-dimmer-popup-swatch-name-active {
+  color: #71767B;
+}
